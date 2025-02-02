@@ -2,8 +2,8 @@ add_executable(intro main.cpp)
 
 target_link_libraries(
   intro
-  PRIVATE myproject::myproject_options
-          myproject::myproject_warnings)
+  PRIVATE SDL3RT::SDL3RT_options
+          SDL3RT::SDL3RT_warnings)
 
 target_link_system_libraries(
   intro
