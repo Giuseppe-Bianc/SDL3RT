@@ -1,3 +1,7 @@
+// NOLINTBEGIN(misc-include-cleaner)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#pragma GCC diagnostic ignored "-Wuseless-cast"
 #include <random>
 
 #include <CLI/CLI.hpp>
@@ -8,6 +12,7 @@
 #include <internal_use_only/config.hpp>
 
 #include "SDL3/SDL.h"
+#pragma GCC diagnostic pop
 
 // NOLINTNEXTLINE(bugprone-exception-escape)
 int main(int argc, const char **argv)
@@ -39,12 +44,12 @@ int main(int argc, const char **argv)
 
     [[maybe_unused]] SDL_Window *window = nullptr;
     [[maybe_unused]] SDL_Renderer *renderer = nullptr;
-    int result = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
-    if (result < 0) {
+    const int result = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS); // NOLINT(readability-implicit-bool-conversion)
+    if (result < 0) { // NOLINT(knownConditionTrueFalse)
       spdlog::error("SDL could not initialize! SDL_Error: {}", SDL_GetError());
       return EXIT_FAILURE;
     }
-    window = SDL_CreateWindow("SDL3RT", 640, 480, 0);
+    window = SDL_CreateWindow("SDL3RT", 640, 480, 0); // NOLINT(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
     if (window == nullptr) {
       spdlog::error("Window could not be created! SDL_Error: {}", SDL_GetError());
       return EXIT_FAILURE;
@@ -60,7 +65,7 @@ int main(int argc, const char **argv)
     SDL_Event event;
     bool quit = false;
     while (!quit) {
-      while (SDL_PollEvent(&event) != 0) {
+      while (SDL_PollEvent(&event) != 0) { // NOLINT(readability-implicit-bool-conversion)
         switch (event.type) {
         case SDL_EVENT_QUIT:
           quit = true;
@@ -70,7 +75,7 @@ int main(int argc, const char **argv)
           break;
         }
       }
-      SDL_SetRenderDrawColor(renderer, 0, 0, 0xff, 0xff);
+      SDL_SetRenderDrawColor(renderer, 0, 0, 0xff, 0xff); // NOLINT(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
       SDL_RenderClear(renderer);
       SDL_RenderPresent(renderer);
       SDL_Delay(1);
@@ -84,3 +89,5 @@ int main(int argc, const char **argv)
     spdlog::error("Unhandled exception in main: {}", e.what());
   }
 }
+
+// NOLINTEND(misc-include-cleaner)
